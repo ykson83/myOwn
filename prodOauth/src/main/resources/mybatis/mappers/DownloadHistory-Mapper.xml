@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ksign.prod.mapper.DownloadHistoryMapper">
+ 	<sql id="tableName">DOWNLOADHISTORY</sql>
+ 	<sql id="tableInitial">DH</sql>
+ 	
+ 	<sql id="colList">
+		DH.HISTORYID AS "historyId",
+		DH.PRODUCTID AS "productId",
+		DH.PURPOSE AS "purpose",
+		
+		DH.DESCRIPTION AS "description",
+		DH.STATUS AS "status",
+		DH.ADDDATE AS "addDate",
+		DH.ADDUSER AS "addUser",
+		DH.MODDATE AS "modDate",
+		DH.MODUSER AS "modUser"	,
+		P.NAME AS "pName"
+	</sql>
+	
+	<resultMap id="downloadHistory" type="DownloadHistory">
+		<id property="historyId" column="historyId" javaType="java.lang.String"/>
+		<!-- <result property="productId" column="productId" /> -->
+		<result property="purpose" column="purpose" />
+	    <result property="description" column="description"/>
+	    <result property="status" column="status"/>
+	    <result property="addDate" column="addDate" />
+	    <result property="addUser" column="addUser" />
+	    <result property="modDate" column="modDate" />
+		<result property="modUser" column="modUser" />
+	    
+	    <association property="product" javaType="Product">
+		    <id property="productId" column="productId"/>
+		    <result property="name" column="pName"/>
+		 </association>
+		
+	</resultMap>
+	
+ 	<select id="selectListCount" parameterType="java.util.HashMap" resultType="int">
+		SELECT COUNT(*) FROM <include refid="tableName" /> <include refid="tableInitial" />
+		JOIN PRODUCT P ON P.PRODUCTID = DH.PRODUCTID
+			<trim prefix="WHERE" prefixOverrides="AND |OR ">
+				<if test="historyId != null and historyId !=''">
+					AND <include refid="tableInitial" />.HISTORYID = #{historyId}
+				</if>
+				<if test="productId != null and productId !=''">
+					AND <include refid="tableInitial" />.PRODUCTID LIKE CONCAT("%", #{productId}, "%")
+				</if>
+				<if test="purpose != null and purpose !=''">
+					AND <include refid="tableInitial" />.PURPOSE LIKE CONCAT("%", #{purpose}, "%")
+				</if>
+				<if test="description != null and description !=''">
+					AND <include refid="tableInitial" />.DESCRIPTION LIKE CONCAT("%", #{description}, "%")
+				</if>
+				<if test="name != null and name !=''">
+					AND P.NAME LIKE CONCAT("%", #{name}, "%")
+				</if>
+			</trim>
+		<if test="orderBy != null and orderBy != ''">
+			order by ${orderBy} ${orderDir}
+		</if>
+	</select>
+	
+	<select id="selectList" parameterType="java.util.HashMap" resultMap="downloadHistory">
+		SELECT <include refid="colList" />
+		
+			FROM <include refid="tableName" /> <include refid="tableInitial" />
+			JOIN PRODUCT P ON P.PRODUCTID = DH.PRODUCTID
+			<trim prefix="WHERE" prefixOverrides="AND |OR ">
+				<if test="historyId != null and historyId !=''">
+					AND <include refid="tableInitial" />.HISTORYID = #{historyId}
+				</if>
+				<if test="productId != null and productId !=''">
+					AND <include refid="tableInitial" />.PRODUCTID LIKE CONCAT("%", #{productId}, "%")
+				</if>
+				<if test="purpose != null and purpose !=''">
+					AND <include refid="tableInitial" />.PURPOSE LIKE CONCAT("%", #{purpose}, "%")
+				</if>
+				<if test="description != null and description !=''">
+					AND <include refid="tableInitial" />.DESCRIPTION LIKE CONCAT("%", #{description}, "%")
+				</if>
+				<if test="name != null and name !=''">
+					AND P.NAME LIKE CONCAT("%", #{name}, "%")
+				</if>
+			</trim>
+			<if test="orderBy != null and orderBy != ''">
+				order by ${orderBy} ${orderDir}
+			</if>
+			<if test="pageNo != null and pageNo !=''">
+				LIMIT ${pageNo}, ${pageSize}
+			</if>
+	</select>
+	
+	<select id="select" parameterType="String" resultMap="downloadHistory">
+		SELECT <include refid="colList" /> FROM <include refid="tableName" /> <include refid="tableInitial" />
+		JOIN PRODUCT P ON P.PRODUCTID = DH.PRODUCTID
+		WHERE <include refid="tableInitial" />.HISTORYID = #{_parameter}
+	</select>
+	
+	<select id="selectByName" parameterType="java.util.HashMap" resultMap="downloadHistory">
+		SELECT <include refid="colList" /> FROM <include refid="tableName" /> <include refid="tableInitial" />
+		JOIN PRODUCT P ON P.PRODUCTID = DH.PRODUCTID
+		WHERE <include refid="tableInitial" />.HISTORYID = #{_parameter}
+	</select>
+	
+	<insert id="insert" parameterType="DownloadHistory"> 
+		INSERT INTO <include refid="tableName" /> 
+		(
+			HISTORYID,
+			PRODUCTID,
+			PURPOSE,
+			DESCRIPTION,
+			STATUS,
+			ADDDATE,
+			ADDUSER,
+			MODDATE,
+			MODUSER
+		)
+		VALUES
+		(
+			#{historyId, jdbcType=VARCHAR},
+			#{product.productId, jdbcType=VARCHAR},
+			#{purpose, jdbcType=VARCHAR},
+			#{description, jdbcType=VARCHAR},
+			#{status, jdbcType=INTEGER},
+			#{addDate, jdbcType=TIMESTAMP},
+			#{addUser, jdbcType=VARCHAR},
+			#{modDate, jdbcType=TIMESTAMP},			
+			#{modUser, jdbcType=VARCHAR}
+		)
+	</insert>
+
+</mapper>
