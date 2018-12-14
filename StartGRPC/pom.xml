@@ -9,6 +9,8 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>son.yeon.kyung</groupId>
+<!-- 	groupId를 son.yeon.kyung이라고 했으니까  -->
+<!-- 	이 프젝 .jar는 USER/.m2/repository/son/yeon/kyung/StartGRPC/~-SNAPSHOT 폴더 안에 있오 -->
 	<artifactId>StartGRPC</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>StartGRPC</name>
@@ -47,11 +49,18 @@
 		</dependency>
 		
 <!-- 		gRPC -->
-		<dependency>
+	<!-- 	<dependency>
             <groupId>io.grpc</groupId>
             <artifactId>grpc-all</artifactId>
             <version>1.16.1</version>
-        </dependency>
+        </dependency> -->
+        
+        <dependency>
+	        <groupId>io.github.lognet</groupId>
+	        <artifactId>grpc-spring-boot-starter</artifactId>
+	        <version>${grpc-spring-boot-starter.version}</version>
+	    </dependency>
+	        
         
 	</dependencies>
 

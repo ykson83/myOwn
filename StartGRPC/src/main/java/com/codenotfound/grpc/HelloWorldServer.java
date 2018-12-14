@@ -11,16 +11,11 @@ import io.grpc.BindableService;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 
+
+//얘는 spring boot 안타고 java로만 서버 올릴때 필요한 코드야
+//spring boot 타서 올릴땐 아예 삭제해버려도 돼
 public class HelloWorldServer {
 	Logger log = LoggerFactory.getLogger(this.getClass());
-	/*public static void main(String[] args) throws IOException, InterruptedException {
-		
-		Server server = ServerBuilder.forPort(6565)     // listen on port 6565
-                .addService(new HelloWorldServiceImpl())   // add service implementation
-                .build();
-        server.start();                                 // start server
-        server.awaitTermination();
-	}*/
 	
 	private final Server server;
     private final int port;

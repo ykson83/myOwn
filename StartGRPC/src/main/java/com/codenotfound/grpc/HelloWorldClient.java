@@ -1,6 +1,7 @@
 package com.codenotfound.grpc;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +23,7 @@ public class HelloWorldClient {
 	public static void main(String[] args) throws IOException, InterruptedException {
 		System.out.println("dd?");
 		
-		ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 6565) //set host & port
+		ManagedChannel channel = ManagedChannelBuilder.forAddress("127.0.0.1", 6566) //set host & port
 				  .usePlaintext() //
 				  .build();
 		
@@ -43,7 +44,12 @@ public class HelloWorldClient {
 		System.out.println("client received greeting: " + greeting);
 		
 		//5. close the channel
-		channel.shutdown();
+		//channel.shutdown();  
+		channel.shutdown().awaitTermination(10, TimeUnit.SECONDS);
+		//channel.shutdown() 바로하면 연결 끊기면서 exception 발생
+		//"IOException: 현재 연결은 원격 호스트에 의해 강제로 끊겼습니다"
+		//server는 안죽지만 client는 죽나봐
+		
 		System.out.println("gRPC client shutdown");
 	}
 }

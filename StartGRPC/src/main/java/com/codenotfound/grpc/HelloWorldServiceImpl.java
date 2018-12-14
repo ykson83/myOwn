@@ -1,8 +1,8 @@
 package com.codenotfound.grpc;
 
+import org.lognet.springboot.grpc.GRpcService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 import com.codenotfound.grpc.helloworld.Greeting;
 import com.codenotfound.grpc.helloworld.HelloWorldServiceGrpc.HelloWorldServiceImplBase;
@@ -10,8 +10,9 @@ import com.codenotfound.grpc.helloworld.Person;
 
 import io.grpc.stub.StreamObserver;
 
-@Component
-public class HelloWorldServiceImpl extends HelloWorldServiceImplBase{
+@GRpcService
+//spring boot 실행될 때 GRpcService 어노테이션을 읽어서 서버 올려 
+public class HelloWorldServiceImpl extends HelloWorldServiceImplBase {
 	Logger log = LoggerFactory.getLogger(this.getClass());
 
 	@Override
