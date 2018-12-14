@@ -8,7 +8,6 @@ public class StartGrpcApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(StartGrpcApplication.class, args);
-		System.out.println("dho");
 	}
 
 }

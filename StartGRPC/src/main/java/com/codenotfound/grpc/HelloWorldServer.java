@@ -1,5 +1,6 @@
 package com.codenotfound.grpc;
 
+import java.util.Arrays;
 import java.util.List;
 import java.io.IOException;
 
@@ -36,6 +37,7 @@ public class HelloWorldServer {
         server.start();
         log.info("Server started, listening on " + port);
         this.blockUntilShutdown();
+//        this.server.awaitTermination();
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             System.err.println("*** shutting down gRPC server since JVM is shutting down");
@@ -46,9 +48,17 @@ public class HelloWorldServer {
 
     public void stop() {
         if (server != null) server.shutdown();
+        System.out.println("server stoped");
     }
 
     public void blockUntilShutdown() throws InterruptedException {
         if (server != null) server.awaitTermination();
     }
+    
+    public static void main(String[] args) throws InterruptedException, IOException {
+		
+    	HelloWorldServer server = new HelloWorldServer(6565, Arrays.asList(new HelloWorldServiceImpl()));
+		server.start();
+		server.blockUntilShutdown();
+	}
 }
