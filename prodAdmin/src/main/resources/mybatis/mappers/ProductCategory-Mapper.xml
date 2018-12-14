@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ksign.prod.mapper.ProductCategoryMapper">
+ 	<sql id="tableName">PRODUCTCATEGORY</sql>
+ 	<sql id="tableInitial">PC</sql>
+ 	
+ 	<sql id="colList">
+		PC.PRODUCTCATEGORYID AS "productCategoryId",
+		PC.NAME AS "name",
+
+		PC.DESCRIPTION AS "description",
+		PC.STATUS AS "status",
+		PC.ADDDATE AS "addDate",
+		PC.ADDUSER AS "addUser",
+		PC.MODDATE AS "modDate",
+		PC.MODUSER AS "modUser"		
+	</sql>
+	
+ 	<select id="selectListCount" parameterType="java.util.HashMap" resultType="int">
+		SELECT COUNT(*) FROM <include refid="tableName" /> <include refid="tableInitial" />
+			<trim prefix="WHERE" prefixOverrides="AND |OR ">
+				<if test="productCategoryId != null and productCategoryId !=''">
+					AND <include refid="tableInitial" />.PRODUCTCATEGORYID = #{productCategoryId}
+				</if>
+				<if test="name != null and name !=''">
+					AND <include refid="tableInitial" />.NAME LIKE CONCAT("%", #{name}, "%")
+				</if>
+				
+				<if test="description != null and description !=''">
+					AND <include refid="tableInitial" />.DESCRIPTION LIKE CONCAT("%", #{description}, "%")
+				</if>
+<!-- 				<if test="status > -1"> -->
+<!-- 					AND <include refid="tableInitial" />.STATUS = #{status} -->
+<!-- 				</if> -->
+			AND <include refid="tableInitial" />. STATUS = 1
+			</trim>
+		<if test="orderBy != null and orderBy != ''">
+			order by <include refid="tableInitial" />.${orderBy} ${orderDir}
+		</if>
+	</select>
+	
+	<select id="selectList" parameterType="java.util.HashMap" resultType="ProductCategory">
+		SELECT  
+			<include refid="colList" />
+			FROM <include refid="tableName" /> <include refid="tableInitial" />
+			<trim prefix="WHERE" prefixOverrides="AND |OR ">
+				<if test="productCategoryId != null and productCategoryId !=''">
+					AND <include refid="tableInitial" />.PRODUCTCATEGORYID = #{productCategoryId}
+				</if>
+				<if test="name != null and name !=''">
+					AND <include refid="tableInitial" />.NAME LIKE CONCAT("%", #{name}, "%")
+				</if>
+			
+				<if test="description != null and description !=''">
+					AND <include refid="tableInitial" />.DESCRIPTION LIKE CONCAT("%", #{description}, "%")
+				</if>
+				
+<!-- 				<if test="status > -1"> -->
+<!-- 					AND <include refid="tableInitial" />.STATUS = #{status} -->
+<!-- 				</if> -->
+				
+			AND <include refid="tableInitial" />. STATUS = 1
+			</trim>
+			<if test="orderBy != null and orderBy != ''">
+				order by <include refid="tableInitial" />.${orderBy} ${orderDir}
+			</if>
+			<if test="pageNo != null and pageNo !=''">
+				LIMIT ${pageNo}, ${pageSize}
+			</if>
+	</select>
+	
+	<select id="select" parameterType="String" resultType="ProductCategory">
+		SELECT <include refid="colList" /> FROM <include refid="tableName" /> <include refid="tableInitial" />
+		WHERE <include refid="tableInitial" />.PRODUCTCATEGORYID = #{_parameter}
+	</select>
+	
+	<select id="selectByName" parameterType="String" resultType="ProductCategory">
+		SELECT <include refid="colList" /> FROM <include refid="tableName" /> <include refid="tableInitial" />
+		WHERE <include refid="tableInitial" />.NAME = #{_parameter}
+	</select>
+	
+	<update id="update" parameterType="ProductCategory">
+		UPDATE <include refid="tableName" /> SET
+			NAME = #{name, jdbcType=VARCHAR},
+
+			DESCRIPTION = #{description, jdbcType=VARCHAR},
+			STATUS  = #{status, jdbcType=INTEGER},
+			MODDATE = #{modDate, jdbcType=TIMESTAMP},
+			MODUSER = #{modUser, jdbcType=VARCHAR}
+		WHERE PRODUCTCATEGORYID = #{productCategoryId}
+	</update>
+	
+	<insert id="insert" parameterType="ProductCategory"> 
+		INSERT INTO <include refid="tableName" /> 
+		(
+			PRODUCTCATEGORYID,
+			NAME,
+			DESCRIPTION,
+			STATUS,
+			ADDDATE,
+			ADDUSER,
+			MODDATE,
+			MODUSER
+		)
+		VALUES
+		(
+			#{productCategoryId, jdbcType=VARCHAR},
+			#{name, jdbcType=VARCHAR},
+			#{description, jdbcType=VARCHAR},
+			#{status, jdbcType=INTEGER},
+			#{addDate, jdbcType=TIMESTAMP},
+			#{addUser, jdbcType=VARCHAR},
+			#{modDate, jdbcType=TIMESTAMP},			
+			#{modUser, jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	
+	<update id="delete" parameterType="ProductCategory">
+		UPDATE <include refid="tableName" /> SET
+			STATUS  = #{status, jdbcType=INTEGER},
+			MODDATE = #{modDate, jdbcType=TIMESTAMP},
+			MODUSER = #{modUser, jdbcType=VARCHAR}
+		WHERE PRODUCTCATEGORYID = #{productCategoryId}
+	</update>
+</mapper>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-4.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+
+	<security:http pattern="/resources/**" security="none" />
+	<security:http pattern="/*.html" security="none" />
+	<security:http pattern="/js/**" security="none" />
+	<security:http pattern="/img/*" security="none" /> 
+	<security:http pattern="/**/*.ico" security="none" />
+	
+	<security:http auto-config="true" disable-url-rewriting="true" use-expressions="true">
+		<security:intercept-url pattern="/views/main/login" access="permitAll" />
+		<security:intercept-url pattern="login.ajax" access="permitAll"/>
+		<security:intercept-url pattern="/**" access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')"/>
+		
+		
+<!-- 		<security:intercept-url pattern="/member/**" access="isAuthenticated()"/> //인증한사람만 들어갈수있음 -->
+<!-- 		<security:intercept-url pattern="/user" access="hasRole('ROLE_USER')" /> -->
+		
+		<security:form-login login-page="/views/main/login"
+			username-parameter="userId"
+			password-parameter="password"
+			login-processing-url="/login.ajax" 
+			default-target-url="/views/main/main"
+			authentication-success-handler-ref="loginSuccessHandler"
+			authentication-failure-handler-ref="loginFailureHandler"/>
+		<security:logout invalidate-session="true"
+			logout-url="/logout"
+			logout-success-url="/"
+			/>
+<!-- 			delete-cookies="JSESSIONID,SPRING_SECURITY_REMEMBER_ME_COOKIE" -->
+		
+		<security:remember-me key="remember_me_key"  remember-me-parameter="remember-me" token-validity-seconds="2419200"/> 
+		<security:csrf disabled="true"/>
+		<!-- <security:form-login login-page="/loginForm" authentication-failure-url="성공유알엘 "/> -->
+	</security:http>
+	
+	<bean id="authenService" class="com.ksign.prod.auth.AuthenService"/>
+
+	<!-- 	로그인 성공시 핸들러 -->
+	<bean id="loginSuccessHandler" class="com.ksign.prod.auth.handler.LoginSuccessHandler" />
+	<!-- 	로그인 실패시 핸들러 -->
+	<bean id="loginFailureHandler" class="com.ksign.prod.auth.handler.LoginFailureHandler" />
+
+	<!-- 	비밀번호 비교 -->
+	<bean id="passwordEncoder" class="com.ksign.prod.auth.UserPasswordEncoder" />
+	<bean id="authenticationProvider" class="com.ksign.prod.auth.AuthenProvider" />
+	
+	<security:authentication-manager alias="authenticationManager">
+		<security:authentication-provider ref="authenticationProvider">
+		</security:authentication-provider>
+
+	</security:authentication-manager>
+
+
+</beans>
