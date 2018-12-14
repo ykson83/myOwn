@@ -1,4 +1,4 @@
-package com.codenotfountd;
+package com.codenotfound;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

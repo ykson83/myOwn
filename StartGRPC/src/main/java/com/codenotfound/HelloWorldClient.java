@@ -1,4 +1,4 @@
-package com.codenotfountd;
+package com.codenotfound;
 
 import javax.annotation.PostConstruct;
 
