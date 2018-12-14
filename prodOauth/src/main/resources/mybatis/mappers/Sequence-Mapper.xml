@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ksign.prod.mapper.SequenceMapper">
+ 	<select id="select" parameterType="String" resultType="Sequence">
+ 		SELECT NAME AS "name", SEQ_VALUE AS "seqValue" FROM SEQ_TABLE WHERE NAME = #{_parameter}
+ 	</select>
+ 	
+ 	<insert id="insert" parameterType="Sequence">
+ 		INSERT INTO SEQ_TABLE 
+ 		( NAME, SEQ_VALUE )
+ 		VALUES
+ 		( #{name}, #{seqValue} )
+ 	</insert>
+ 	
+ 	<update id="update" parameterType="Sequence">
+ 		UPDATE SEQ_TABLE SET SEQ_VALUE = #{seqValue} WHERE NAME = #{name}
+ 	</update>
+</mapper>

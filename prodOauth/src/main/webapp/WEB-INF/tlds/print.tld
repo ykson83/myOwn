@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+    version="2.0">
+
+	<tlib-version>2.1</tlib-version>
+	<short-name>sTag</short-name>
+	<tag>
+		<!-- 태그이름 -->
+		<name>selectTag</name>
+	
+		<!-- 태그 클래스 -->
+		<tag-class>com.ksign.prod.util.Tag</tag-class>
+		<body-content>tagdependent</body-content>
+	
+		<!-- 입력 파라메터 -->
+		<attribute>
+		<name>name</name>
+		<required>true</required>
+		</attribute>
+	
+	</tag>
+</taglib>
